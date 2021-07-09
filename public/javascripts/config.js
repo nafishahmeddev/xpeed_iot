@@ -1,1 +1,1 @@
-const BROKER_URL = "ws://localhost:3000";
+const BROKER_URL = "wss://xpeed-iot.herokuapp.com";
