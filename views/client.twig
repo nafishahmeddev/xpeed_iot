@@ -1,38 +1,95 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
-  <h1>{{title}}</h1>
-  <fieldset>
-    <legend>Configuration</legend>
+  <div class="uk-container uk-container-xsmall">
+    <h1>{{title}}</h1>
+    <p>Welcome to {{ title }}</p>
+    <div class="uk-card uk-card-default uk-card-outline uk-card-small uk-border-rounded">
+      <div class="uk-card-header">
+        <h5>Configuration</h5>
+      </div>
+      <div class="uk-card-body">
+        <div class="uk-inline">
+          <label class="uk-text-small" for="_uid">Device ID</label>
+          <select class="uk-select uk-form-small uk-border-rounded" type="text" id="_uid" onchange="login()">
+            <option></option>
+            <option>C1</option>
+            <option>C2</option>
+            <option>C3</option>
+            <option>C4</option>
+          </select>
+        </div>
 
-    <label for="_uid">Device ID</label>
-    <select type="text" id="_uid" onchange="login()">
-      <option></option>
-      <option>C1</option>
-      <option>C2</option>
-      <option>C3</option>
-      <option>C4</option>
-    </select>
 
 
+        <div class="uk-inline">
+          <label class="uk-text-small" for="_device_uid">Client ID</label>
+          <select class="uk-select uk-form-small uk-border-rounded" onchange="subscribe(this.value)" id="_device_uid">
+            <option></option>
+            <option>D1</option>
+            <option>D2</option>
+            <option>D3</option>
+            <option>D4</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-    <label for="_device_uid">Client ID</label>
-    <select onchange="subscribe(this.value)" id="_device_uid">
-      <option></option>
-      <option>D1</option>
-      <option>D2</option>
-      <option>D3</option>
-      <option>D4</option>
-    </select>
-  </fieldset>
+    {% for i in 1..4 %}
+    <div class="uk-margin uk-card uk-card-default uk-card-outline uk-card-small uk-border-rounded uk-card-body">
+      <div class="uk-grid" uk-grid>
+        <div class="uk-width-expand">Device {{ i }}</div>
+        <div>
+          <input id="device_checkbox_{{ i }}" type="checkbox" value="on" onchange="publish(this.checked?'0':'255', 'D{{ i }}')">
+          <label for="device_checkbox_{{ i }}">Toggle</label>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <style>
+    input[type=checkbox]{
+      height: 0;
+      width: 0;
+      display: none;
+    }
 
-  <table>
-    <tr>
-      <td>
-        <input type="checkbox" value="on" onchange="publish(this.checked?'0':'255', 'D1')">
-      </td>
-    </tr>
-  </table>
+    input[type=checkbox]+label {
+      cursor: pointer;
+      text-indent: -9999px;
+      width: 30px;
+      height: 15px;
+      background: grey;
+      display: block;
+      border-radius: 15px;
+      position: relative;
+    }
+
+    input[type=checkbox]+label:after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 11px;
+      height: 11px;
+      background: #fff;
+      border-radius: 11px;
+      transition: 0.15s;
+    }
+
+    input[type=checkbox]:checked + label {
+      background: #bada55;
+    }
+
+    input[type=checkbox]:checked + label:after {
+      left: calc(100% - 1px);
+      transform: translateX(-100%);
+    }
+
+    input[type=checkbox]label:active:after {
+      width: 26px;
+    }
+  </style>
   <script>
     var ws = null;
     function connect() {

@@ -1,7 +1,7 @@
 
 const ws = require('ws');
 
-module.exports =   function Broker(server){
+module.exports =   function Broker(server, app){
 
     var _SUBSCRIBERS  = {}
     var _CLIENTS = {};

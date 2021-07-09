@@ -1,60 +1,13 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
-  <h1>{{title}}</h1>
-  <p>Welcome to {{title}}</p>
-  <input type="text" id="_uid">
-  <select id="_event">
-    <option>login</option>
-    <option>subscribe</option>
-    <option>publish</option>
-  </select>
-  <input type="text" id="_value">
-  <button onclick="send()">Send</button>
-
-  <script>
-    var ws = null;
-    function connect() {
-      ws = new WebSocket(BROKER_URL);
-      ws.onopen = function() {
-        // subscribe to some channels
-        ws.send(JSON.stringify({
-          //.... some message the I must send when I connect ....
-        }));
-      };
-
-      ws.onmessage = function(e) {
-        console.log('Message:', e.data);
-      };
-
-      ws.onclose = function(e) {
-        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-        setTimeout(function() {
-          connect();
-        }, 1000);
-      };
-
-      ws.onerror = function(err) {
-        console.error('Socket encountered error: ', err.message, 'Closing socket');
-        ws.close();
-      };
-    }
-    connect();
-    function send(){
-      if(ws==null){return}
-      let _uid = document.querySelector("#_uid").value;
-      let _event = document.querySelector("#_event").value;
-      let _value = document.querySelector("#_value").value;
-
-      let message = {
-        "_uid": _uid,
-        "_event": _event,
-        "_value": _value,
-      }
+  <div class="uk-container">
 
 
+    <h1>{{title}}</h1>
+    <p>Welcome to {{title}}</p>
 
-      ws.send(JSON.stringify(message));
-    }
-  </script>
+    <a class="uk-button uk-button-primary uk-button-small" href="/client">I'm a client</a>
+    <a class="uk-button uk-button-secondary uk-button-small" href="/device">I'm a device</a>
+  </div>
 {% endblock %}
