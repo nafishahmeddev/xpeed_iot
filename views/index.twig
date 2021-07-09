@@ -15,7 +15,7 @@
   <script>
     var ws = null;
     function connect() {
-      ws = new WebSocket('ws://localhost:3000');
+      ws = new WebSocket(BROKER_URL);
       ws.onopen = function() {
         // subscribe to some channels
         ws.send(JSON.stringify({
