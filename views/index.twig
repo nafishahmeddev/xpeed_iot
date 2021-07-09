@@ -1,0 +1,32 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <h1>{{title}}</h1>
+  <p>Welcome to {{title}}</p>
+  <input type="text" id="_uid">
+  <select id="_event">
+    <option>login</option>
+    <option>subscribe</option>
+    <option>publish</option>
+  </select>
+  <input type="text" id="_value">
+  <button onclick="send()">Send</button>
+
+  <script>
+    var ws = new WebSocket("ws://localhost:3000");
+    function send(){
+      let _uid = document.querySelector("#_uid").value;
+      let _event = document.querySelector("#_event").value;
+      let _value = document.querySelector("#_value").value;
+
+      let message = {
+        "_uid": _uid,
+        "_event": _event,
+        "_value": _value,
+      }
+
+      ws
+      .send(JSON.stringify(message));
+    }
+  </script>
+{% endblock %}
