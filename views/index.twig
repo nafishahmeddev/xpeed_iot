@@ -13,8 +13,35 @@
   <button onclick="send()">Send</button>
 
   <script>
-    var ws = new WebSocket("ws://localhost:3000");
+    var ws = null;
+    function connect() {
+      ws = new WebSocket('ws://localhost:3000');
+      ws.onopen = function() {
+        // subscribe to some channels
+        ws.send(JSON.stringify({
+          //.... some message the I must send when I connect ....
+        }));
+      };
+
+      ws.onmessage = function(e) {
+        console.log('Message:', e.data);
+      };
+
+      ws.onclose = function(e) {
+        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        setTimeout(function() {
+          connect();
+        }, 1000);
+      };
+
+      ws.onerror = function(err) {
+        console.error('Socket encountered error: ', err.message, 'Closing socket');
+        ws.close();
+      };
+    }
+    connect();
     function send(){
+      if(ws==null){return}
       let _uid = document.querySelector("#_uid").value;
       let _event = document.querySelector("#_event").value;
       let _value = document.querySelector("#_value").value;
@@ -25,8 +52,9 @@
         "_value": _value,
       }
 
-      ws
-      .send(JSON.stringify(message));
+
+
+      ws.send(JSON.stringify(message));
     }
   </script>
 {% endblock %}

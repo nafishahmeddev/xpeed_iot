@@ -23,6 +23,11 @@ module.exports =   function Broker(server){
                             _SUBSCRIBERS[_uid] = [];
                         }
                         console.log(`${_uid} : Logged In`);
+                        ws.send(JSON.stringify({
+                            "_uid":"BROKER",
+                            "_event" : "login",
+                            "_value": "Successfully logged in"
+                        }));
                         break;
                     case "subscribe":
                         let _client = ob._value;
@@ -33,6 +38,11 @@ module.exports =   function Broker(server){
                             _SUBSCRIBERS[_client].push(_uid);
                         }
                         console.log(`${_uid}: subscribed to ${_client}`);
+                        ws.send(JSON.stringify({
+                            "_uid":"BROKER",
+                            "_event" : "subscribed",
+                            "_value": `Successfully subscribed to ${_client}`
+                        }));
                         break;
                     case "publish":
                         let _value = ob._value;
@@ -45,8 +55,12 @@ module.exports =   function Broker(server){
                                 "_value": _value
                             }));
                         });
+                        ws.send(JSON.stringify({
+                            "_uid":"BROKER",
+                            "_event" : "message_sent",
+                            "_value": `Successfully message sent ${_value}`
+                        }));
                         console.log(`${_uid} : Send Message => ${_value}`);
-
                         break;
                 }
             } catch (e){
