@@ -1,0 +1,96 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <h1>{{title}}</h1>
+  <fieldset>
+    <legend>Configuration</legend>
+
+    <label for="_uid">Device ID</label>
+    <select type="text" id="_uid" onchange="login()">
+      <option></option>
+      <option>C1</option>
+      <option>C2</option>
+      <option>C3</option>
+      <option>C4</option>
+    </select>
+
+
+
+    <label for="_device_uid">Client ID</label>
+    <select onchange="subscribe(this.value)" id="_device_uid">
+      <option></option>
+      <option>D1</option>
+      <option>D2</option>
+      <option>D3</option>
+      <option>D4</option>
+    </select>
+  </fieldset>
+
+  <table>
+    <tr>
+      <td>
+        <input type="checkbox" value="on" onchange="publish(this.checked?'0':'255', 'D1')">
+      </td>
+    </tr>
+  </table>
+  <script>
+    var ws = null;
+    function connect() {
+      ws = new WebSocket('ws://localhost:3000');
+
+      ws.onmessage = function(e) {
+        console.log('Message:', e.data);
+      };
+
+      ws.onclose = function(e) {
+        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        setTimeout(function() {
+          connect();
+        }, 1000);
+      };
+
+      ws.onerror = function(err) {
+        console.error('Socket encountered error: ', err.message, 'Closing socket');
+        ws.close();
+      };
+    }
+    connect();
+
+
+    var _uid = null;
+    function login(){
+      _uid = document.querySelector("#_uid").value;
+      if(ws==null){return}
+      let _event = "login";
+      let message = {
+        "_uid": _uid,
+        "_event": _event,
+        "_value": "",
+      }
+      ws.send(JSON.stringify(message));
+    }
+    function subscribe(device_uid){
+      if(ws==null){return}
+      let message = {
+        "_uid": _uid,
+        "_event": "subscribe",
+        "_value": device_uid,
+      }
+      ws.send(JSON.stringify(message));
+    }
+    function publish(value, device_uid=null){
+      if(ws==null){return}
+
+      let message = {
+        "_uid": _uid,
+        "_event": "publish",
+        "_value": value,
+      }
+
+      if (device_uid!==null){
+        message._client_uid = device_uid
+      }
+      ws.send(JSON.stringify(message));
+    }
+  </script>
+{% endblock %}

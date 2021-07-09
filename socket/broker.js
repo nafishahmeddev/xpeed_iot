@@ -46,15 +46,27 @@ module.exports =   function Broker(server){
                         break;
                     case "publish":
                         let _value = ob._value;
-                        var _subs = _SUBSCRIBERS[_uid];
-                        _subs.forEach(_id=>{
-                            var _sock = _CLIENTS[_id];
-                            _sock.send(JSON.stringify({
-                                "_uid": _uid,
-                                "_event": "message",
-                                "_value": _value
-                            }));
-                        });
+                        if(ob.hasOwnProperty("_client_uid")){
+                            let _client_id = ob._client_uid;
+                            if(_CLIENTS.hasOwnProperty(_client_id)){
+                                let _sock = _CLIENTS[_client_id];
+                                _sock.send(JSON.stringify({
+                                    "_uid": _uid,
+                                    "_event": "message",
+                                    "_value": _value
+                                }));
+                            }
+                        } else {
+                            var _subs = _SUBSCRIBERS[_uid];
+                            _subs.forEach(_id => {
+                                var _sock = _CLIENTS[_id];
+                                _sock.send(JSON.stringify({
+                                    "_uid": _uid,
+                                    "_event": "message",
+                                    "_value": _value
+                                }));
+                            });
+                        }
                         ws.send(JSON.stringify({
                             "_uid":"BROKER",
                             "_event" : "message_sent",
