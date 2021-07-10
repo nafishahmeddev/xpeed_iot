@@ -38,23 +38,25 @@
       </div>
     </div>
 
-    {% for i in 1..4 %}
-    <div class="uk-margin uk-card uk-card-default uk-card-outline uk-card-small uk-border-rounded uk-card-body">
+
+    <div class="uk-margin uk-card uk-card-default uk-card-outline uk-card-small uk-border-rounded">
+      <div class="uk-card-header">
       <div class="uk-grid" uk-grid>
-        <div class="uk-width-expand">Device {{ i }}</div>
+        <div class="uk-width-expand">RGB LED</div>
         <div>
-          <input id="device_checkbox_{{ i }}" type="checkbox" value="on" onchange="set_value(this.checked?'255':'0', 'D{{ i }}')">
-          <label for="device_checkbox_{{ i }}">Toggle</label>
+          <input id="device_checkbox_D1" type="checkbox" value="on" onchange="set_value(this.checked?[255,255,255]:[0,0,0], 'D1')">
+          <label for="device_checkbox_D1">Toggle</label>
         </div>
       </div>
+      </div>
+      <div class="uk-card-body">
+        <div id="example" class="uk-margin-auto uk-flex uk-flex-center"></div>
+      </div>
     </div>
-    {% endfor %}
 
-    <div>
-      <input type="color" oninput="set_value(hexToRgb(this.value), 'D1')">
-    </div>
 
-    <div id="example"></div>
+
+
   </div>
 
   <script>
