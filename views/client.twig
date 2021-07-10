@@ -40,7 +40,7 @@
       <div class="uk-grid" uk-grid>
         <div class="uk-width-expand">Device {{ i }}</div>
         <div>
-          <input id="device_checkbox_{{ i }}" type="checkbox" value="on" onchange="publish(this.checked?'0':'255', 'D{{ i }}')">
+          <input id="device_checkbox_{{ i }}" type="checkbox" value="on" onchange="publish(this.checked?'255':'0', 'D{{ i }}')">
           <label for="device_checkbox_{{ i }}">Toggle</label>
         </div>
       </div>
