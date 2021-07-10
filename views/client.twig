@@ -141,7 +141,10 @@
       let message = {
         "_uid": _uid,
         "_event": "publish",
-        "_value": value,
+        "_payload": {
+          _event: "set_value",
+          _value: value
+        }
       }
 
       if (device_uid!==null){
