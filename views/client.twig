@@ -40,56 +40,18 @@
       <div class="uk-grid" uk-grid>
         <div class="uk-width-expand">Device {{ i }}</div>
         <div>
-          <input id="device_checkbox_{{ i }}" type="checkbox" value="on" onchange="publish(this.checked?'255':'0', 'D{{ i }}')">
+          <input id="device_checkbox_{{ i }}" type="checkbox" value="on" onchange="set_value(this.checked?'255':'0', 'D{{ i }}')">
           <label for="device_checkbox_{{ i }}">Toggle</label>
         </div>
       </div>
     </div>
     {% endfor %}
+
+    <div>
+      <input type="color" onchange="set_value(hexToRgb(this.value), 'D1')">
+    </div>
   </div>
-  <style>
-    input[type=checkbox]{
-      height: 0;
-      width: 0;
-      display: none;
-    }
 
-    input[type=checkbox]+label {
-      cursor: pointer;
-      text-indent: -9999px;
-      width: 30px;
-      height: 15px;
-      background: grey;
-      display: block;
-      border-radius: 15px;
-      position: relative;
-    }
-
-    input[type=checkbox]+label:after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 11px;
-      height: 11px;
-      background: #fff;
-      border-radius: 11px;
-      transition: 0.15s;
-    }
-
-    input[type=checkbox]:checked + label {
-      background: #bada55;
-    }
-
-    input[type=checkbox]:checked + label:after {
-      left: calc(100% - 1px);
-      transform: translateX(-100%);
-    }
-
-    input[type=checkbox]label:active:after {
-      width: 26px;
-    }
-  </style>
   <script>
     var ws = null;
     function connect() {
@@ -135,7 +97,7 @@
       }
       ws.send(JSON.stringify(message));
     }
-    function publish(value, device_uid=null){
+    function set_value(value, device_uid=null){
       if(ws==null){return}
 
       let message = {
@@ -152,5 +114,60 @@
       }
       ws.send(JSON.stringify(message));
     }
+
+
+
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16)
+      ] : null;
+    }
   </script>
+
+  <style>
+    input[type=checkbox]{
+      height: 0;
+      width: 0;
+      display: none;
+    }
+
+    input[type=checkbox]+label {
+      cursor: pointer;
+      text-indent: -9999px;
+      width: 30px;
+      height: 15px;
+      background: grey;
+      display: block;
+      border-radius: 15px;
+      position: relative;
+    }
+
+    input[type=checkbox]+label:after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 11px;
+      height: 11px;
+      background: #fff;
+      border-radius: 11px;
+      transition: 0.15s;
+    }
+
+    input[type=checkbox]:checked + label {
+      background: #bada55;
+    }
+
+    input[type=checkbox]:checked + label:after {
+      left: calc(100% - 1px);
+      transform: translateX(-100%);
+    }
+
+    input[type=checkbox]label:active:after {
+      width: 26px;
+    }
+  </style>
 {% endblock %}
