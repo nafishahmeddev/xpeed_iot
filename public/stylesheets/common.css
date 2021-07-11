@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import "xpeed.css";
 
 /*
@@ -9,7 +9,7 @@
     --color-primary-dark: #0c427e;
     --color-secondary: #a50b0b;
     --color-secondary-dark: #580505;
-    font-family:  "Lucida Grande", Helvetica, Arial, sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
 }
 ::selection{
 background-color: var(--color-primary) !important;
