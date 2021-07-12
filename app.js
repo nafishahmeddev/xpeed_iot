@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
+var cors = require('cors')
 const InitiateMongoServer = require("./config/db");
 /*****
  *
@@ -17,7 +18,7 @@ var deviceRouter = require('./routes/device');
 var clientRouter = require('./routes/client');
 
 var app = express();
-
+app.use(cors())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
