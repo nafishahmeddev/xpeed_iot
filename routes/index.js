@@ -46,7 +46,7 @@ router.post('/', function(req, res, next) {
           let msg = {
             _uid: "hhhhh",
             _event: "set_value",
-            _values: value
+            _values: [255,255,255]
 
           }
           __WS.send(JSON.stringify(msg));
