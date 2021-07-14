@@ -4,9 +4,9 @@ var router = express.Router();
 /* GET home page. */
 router.post('/', function(req, res, next) {
   const body = req.body;
-  const  request = body.request;
+  const request = body.request;
+  const type = request.type;
   const intent = request.intent;
-
   var message = {
     "version": "1.0",
     "sessionAttributes": {
@@ -21,37 +21,52 @@ router.post('/', function(req, res, next) {
       "shouldEndSession": false
     }
   };
-  switch (intent.name){
-    case "turnOn":
-      let device = intent.slots.device.value;
-      message = {
-        "version": "1.0",
-        "response": {
-          "outputSpeech": {
-            "type": "PlainText",
-            "text": `${device} is not responding...`,
-            "playBehavior": "REPLACE_ENQUEUED"
-          },
-          "shouldEndSession": false
-        }
-      };
-      break;
-    case "AMAZON.FallbackIntent":
-      message = {
-        "version": "1.0",
-        "response": {
-          "outputSpeech": {
-            "type": "PlainText",
-            "text": `Hi! welcome to Xpeed Automation`,
-            "playBehavior": "REPLACE_ENQUEUED"
-          },
-          "shouldEndSession": false
-        }
-      };
-        break;
-
+  if (request.type=="LaunchRequest"){
+    message = {
+      "version": "1.0",
+      "response": {
+        "outputSpeech": {
+          "type": "PlainText",
+          "text": `Hi! welcome to Xpeed Automation`,
+          "playBehavior": "REPLACE_ENQUEUED"
+        },
+        "shouldEndSession": false
+      }
+    };
   }
 
+  if(request.type=="IntentRequest") {
+    switch (intent.name) {
+      case "turnOn":
+        let device = intent.slots.device.value;
+        message = {
+          "version": "1.0",
+          "response": {
+            "outputSpeech": {
+              "type": "PlainText",
+              "text": `${device} is not responding...`,
+              "playBehavior": "REPLACE_ENQUEUED"
+            },
+            "shouldEndSession": false
+          }
+        };
+        break;
+      case "AMAZON.FallbackIntent":
+        message = {
+          "version": "1.0",
+          "response": {
+            "outputSpeech": {
+              "type": "PlainText",
+              "text": `Hi! welcome to Xpeed Automation`,
+              "playBehavior": "REPLACE_ENQUEUED"
+            },
+            "shouldEndSession": false
+          }
+        };
+        break;
+
+    }
+  }
 
 
   res.json(message);
