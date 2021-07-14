@@ -3,8 +3,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/', function(req, res, next) {
-  console.log(req);
-  let message = {
+  const body = req.body;
+  const  request = body.request;
+  const intent = request.intent;
+
+  var message = {
     "version": "1.0",
     "sessionAttributes": {
       "key": "value"
@@ -17,9 +20,27 @@ router.post('/', function(req, res, next) {
       },
       "shouldEndSession": false
     }
+  };
+  switch (intent.name){
+    case "turnOn":
+      let device = intent.slots.device.value;
+      message = {
+        "version": "1.0",
+        "response": {
+          "outputSpeech": {
+            "type": "PlainText",
+            "text": `${device} is not responding...`,
+            "playBehavior": "REPLACE_ENQUEUED"
+          },
+          "shouldEndSession": false
+        }
+      };
+      break;
   }
 
-  res.send(JSON.stringify(message));
+
+
+  res.json(message);
 });
 
 router.get('/', function(req, res, next) {
