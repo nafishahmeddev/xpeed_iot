@@ -65,20 +65,47 @@ router.post('/', function(req, res, next) {
           }
         };
         break;
+      case "turnOff":
+        let device = intent.slots.device.value;
+        //////
+
+        if(_CLIENTS.hasOwnProperty("D1")){
+          let __WS = _CLIENTS["D1"];
+          let msg = {
+            _uid: "hhhhh",
+            _event: "set_value",
+            _values: [0,0,0]
+
+          }
+          __WS.send(JSON.stringify(msg));
+        }
+
+        ///////
+        message = {
+          "version": "1.0",
+          "response": {
+            "outputSpeech": {
+              "type": "PlainText",
+              "text": `OK! turning off ${device}.`,
+              "playBehavior": "REPLACE_ENQUEUED"
+            },
+            "shouldEndSession": true
+          }
+        };
+        break;
       case "AMAZON.FallbackIntent":
         message = {
           "version": "1.0",
           "response": {
             "outputSpeech": {
               "type": "PlainText",
-              "text": `Hi! welcome to Xpeed Automation`,
+              "text": `Sorry i don't know that`,
               "playBehavior": "REPLACE_ENQUEUED"
             },
-            "shouldEndSession": false
+            "shouldEndSession": true
           }
         };
         break;
-
     }
   }
 
