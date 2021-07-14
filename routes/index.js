@@ -37,7 +37,7 @@ router.post('/', function(req, res, next) {
 
   if(request.type=="IntentRequest") {
     switch (intent.name) {
-      case "turnOn":
+      case "lightControl":
         var  device = intent.slots.device.value;
         //////
 
@@ -50,20 +50,33 @@ router.post('/', function(req, res, next) {
 
           }
           __WS.send(JSON.stringify(msg));
+          message = {
+            "version": "1.0",
+            "response": {
+              "outputSpeech": {
+                "type": "PlainText",
+                "text": `OK! turning on ${device}.`,
+                "playBehavior": "REPLACE_ENQUEUED"
+              },
+              "shouldEndSession": true
+            }
+          };
+        } else {
+          message = {
+            "version": "1.0",
+            "response": {
+              "outputSpeech": {
+                "type": "PlainText",
+                "text": `${device} is not responding.`,
+                "playBehavior": "REPLACE_ENQUEUED"
+              },
+              "shouldEndSession": true
+            }
+          };
         }
 
         ///////
-        message = {
-          "version": "1.0",
-          "response": {
-            "outputSpeech": {
-              "type": "PlainText",
-              "text": `OK! turning on ${device}.`,
-              "playBehavior": "REPLACE_ENQUEUED"
-            },
-            "shouldEndSession": true
-          }
-        };
+
         break;
       case "turnOff":
         var device = intent.slots.device.value;
