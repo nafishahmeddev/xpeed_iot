@@ -2,7 +2,7 @@
 const ws = require('ws');
 
 module.exports =   function Broker(server, app){
-    
+
     const wss = new ws.Server({server});
 
     wss.on('connection', (ws) => {
@@ -72,6 +72,9 @@ module.exports =   function Broker(server, app){
             //log the received message and send it back to the client
             //console.log('received: %s', raw);
             //ws.send(`Hello, you sent -> ${raw}`);
+        });
+        socket.on('disconnect', function(data) {
+            console.log(data);
         });
         //send immediatly a feedback to the incoming connection
         ws.send('Successfully connected to broker server');
