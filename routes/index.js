@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/', function(req, res, next) {
-  console.log(req.query);
+  console.log(req);
   let message = {
     "version": "1.0",
     "sessionAttributes": {
