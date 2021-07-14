@@ -6,7 +6,7 @@ router.post('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
   console.log(req.query);
   let message = {
-    "version": "string",
+    "version": "1.0",
     "sessionAttributes": {
       "key": "value"
     },
@@ -41,7 +41,7 @@ router.post('/', function(req, res, next) {
     }
   }
 
-  res.json(message);
+  res.send(JSON.stringify(message));
 });
 
 router.get('/', function(req, res, next) {
