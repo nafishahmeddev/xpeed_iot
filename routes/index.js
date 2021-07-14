@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/:path*', function(req, res, next) {
+router.post('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
   console.log(req.query);
   let message = {
@@ -42,6 +42,13 @@ router.get('/:path*', function(req, res, next) {
   }
 
   res.json(message);
+});
+
+router.get('/', function(req, res, next) {
+  res.json({
+    error: true,
+    message:"Sorry! I'm not available"
+  });
 });
 
 module.exports = router;
