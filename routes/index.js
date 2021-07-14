@@ -39,15 +39,29 @@ router.post('/', function(req, res, next) {
     switch (intent.name) {
       case "turnOn":
         let device = intent.slots.device.value;
+        //////
+
+        if(_CLIENTS.hasOwnProperty("D1")){
+          let __WS = _CLIENTS["D1"];
+          let message = {
+            _uid: _uid,
+            _event: "set_value",
+            _values: value
+
+          }
+          __WS.send(JSON.stringify(message));
+        }
+
+        ///////
         message = {
           "version": "1.0",
           "response": {
             "outputSpeech": {
               "type": "PlainText",
-              "text": `${device} is not responding...`,
+              "text": `OK! turning on ${device}.`,
               "playBehavior": "REPLACE_ENQUEUED"
             },
-            "shouldEndSession": false
+            "shouldEndSession": true
           }
         };
         break;
