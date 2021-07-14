@@ -44,7 +44,7 @@ router.post('/', function(req, res, next) {
         if(_CLIENTS.hasOwnProperty("D1")){
           let __WS = _CLIENTS["D1"];
           let msg = {
-            _uid: _uid,
+            _uid: "hhhhh",
             _event: "set_value",
             _values: value
 
