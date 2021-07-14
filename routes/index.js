@@ -3,7 +3,6 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/', function(req, res, next) {
-  //res.render('index', { title: 'Express' });
   console.log(req.query);
   let message = {
     "version": "1.0",
@@ -16,7 +15,7 @@ router.post('/', function(req, res, next) {
         "text": "Plain text string to speak",
         "playBehavior": "REPLACE_ENQUEUED"
       },
-      "shouldEndSession": true
+      "shouldEndSession": false
     }
   }
 
