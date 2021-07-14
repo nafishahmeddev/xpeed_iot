@@ -36,7 +36,7 @@ router.post('/', function(req, res, next) {
         }
       };
       break;
-    case "AMAZON.FallbackIntent:
+    case "AMAZON.FallbackIntent":
       message = {
         "version": "1.0",
         "response": {
