@@ -14,9 +14,6 @@ const InitiateMongoServer = require("./config/db");
 InitiateMongoServer();
 
 var indexRouter = require('./routes/index');
-var userRouter = require('./routes/user');
-var deviceRouter = require('./routes/device');
-var clientRouter = require('./routes/client');
 
 var app = express();
 app.use(cors())
@@ -32,9 +29,7 @@ app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use("/user", userRouter);
-app.use('/device', deviceRouter);
-app.use('/client', clientRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
