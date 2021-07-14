@@ -73,7 +73,7 @@ module.exports =   function Broker(server, app){
             //console.log('received: %s', raw);
             //ws.send(`Hello, you sent -> ${raw}`);
         });
-        socket.on('disconnect', function(data) {
+        ws.on('disconnect', function(data) {
             console.log(data);
         });
         //send immediatly a feedback to the incoming connection
