@@ -36,6 +36,20 @@ router.post('/', function(req, res, next) {
         }
       };
       break;
+    case "AMAZON.FallbackIntent:
+      message = {
+        "version": "1.0",
+        "response": {
+          "outputSpeech": {
+            "type": "PlainText",
+            "text": `Hi! welcome to Xpeed Automation`,
+            "playBehavior": "REPLACE_ENQUEUED"
+          },
+          "shouldEndSession": false
+        }
+      };
+        break;
+
   }
 
 
