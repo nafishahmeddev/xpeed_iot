@@ -38,7 +38,7 @@ router.post('/', function(req, res, next) {
   if(request.type=="IntentRequest") {
     switch (intent.name) {
       case "turnOn":
-        let device = intent.slots.device.value;
+        var  device = intent.slots.device.value;
         //////
 
         if(_CLIENTS.hasOwnProperty("D1")){
@@ -66,7 +66,7 @@ router.post('/', function(req, res, next) {
         };
         break;
       case "turnOff":
-        let device = intent.slots.device.value;
+        var device = intent.slots.device.value;
         //////
 
         if(_CLIENTS.hasOwnProperty("D1")){
