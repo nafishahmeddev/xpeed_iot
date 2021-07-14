@@ -43,13 +43,13 @@ router.post('/', function(req, res, next) {
 
         if(_CLIENTS.hasOwnProperty("D1")){
           let __WS = _CLIENTS["D1"];
-          let message = {
+          let msg = {
             _uid: _uid,
             _event: "set_value",
             _values: value
 
           }
-          __WS.send(JSON.stringify(message));
+          __WS.send(JSON.stringify(msg));
         }
 
         ///////
