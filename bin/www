@@ -9,6 +9,9 @@ var broker = require('../socket/broker');
 var debug = require('debug')('xpeed-iot:server');
 var http = require('http');
 
+global._SUBSCRIBERS = {};
+global._CLIENTS ={};
+
 /**
  * Get port from environment and store in Express.
  */

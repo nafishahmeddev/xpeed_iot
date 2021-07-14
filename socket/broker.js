@@ -2,10 +2,7 @@
 const ws = require('ws');
 
 module.exports =   function Broker(server, app){
-
-    var _SUBSCRIBERS  = {}
-    var _CLIENTS = {};
-
+    
     const wss = new ws.Server({server});
 
     wss.on('connection', (ws) => {
