@@ -17,10 +17,10 @@ const UserSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    contacts: {
-        type : Array,
-        default: []
-    }
+    contacts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+        }]
 });
 
 // export model user with UserSchema

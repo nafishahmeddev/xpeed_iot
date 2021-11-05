@@ -2,13 +2,15 @@
 // Filename : user.js
 
 const express = require("express");
-const { check, validationResult} = require("express-validator/check");
+const { check, validationResult} = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
 const Users = require("../model/Users");
+const Conversations = require("../model/Conversations");
+const Mongoose = require("mongoose");
 
 /**
  * @method - POST
@@ -144,6 +146,67 @@ router.post(
     }
 );
 
+router.post(
+    "/login",
+    [
+        check("email", "Please enter a valid email").isEmail(),
+        check("password", "Please enter a valid password").isLength({
+            min: 6
+        })
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        const { email, password } = req.body;
+        try {
+            let user = await Users.findOne({
+                email
+            });
+            if (!user)
+                return res.status(400).json({
+                    message: "Users Not Exist"
+                });
+
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch)
+                return res.status(400).json({
+                    message: "Incorrect Password !"
+                });
+
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            };
+
+            jwt.sign(
+                payload,
+                "randomString",
+                {
+                    expiresIn: 3600
+                },
+                (err, token) => {
+                    if (err) throw err;
+                    res.status(200).json({
+                        token
+                    });
+                }
+            );
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                message: "Server Error"
+            });
+        }
+    }
+);
+
 /**
  * @method - GET
  * @description - Get LoggedIn Users
@@ -151,12 +214,18 @@ router.post(
  */
 
 
-router.get("/me", auth, async (req, res) => {
+router.get("/conversations", auth, async (req, res) => {
     try {
         // request.user is getting fetched from Middleware after token authentication
-        const user = await Users.findById(req.user.id);
-        res.json(user);
+        const conversation = await Conversations.find({
+            members : { $ne: new Mongoose.Types.ObjectId( req.user._id)}
+        });
+
+        const conversations= await Conversations.getConversations(req.user._id);
+
+        res.json(conversations);
     } catch (e) {
+        console.log(e.message);
         res.send({ message: "Error in Fetching user" });
     }
 });
