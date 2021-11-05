@@ -1,5 +1,5 @@
 const Mongoose = require("mongoose");
-const Conversations = Mongoose.model("conversations", new Mongoose.Schema({
+const ConversationSchema = new Mongoose.Schema({
     title: {
         type: String,
     },
@@ -12,7 +12,8 @@ const Conversations = Mongoose.model("conversations", new Mongoose.Schema({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'users'
     }]
-}));
+});
+const Conversations = Mongoose.model("conversations", ConversationSchema);
 Conversations.getConversations = (user_id, type = 0) =>{
     return Conversations.aggregate([
         {
