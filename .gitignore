@@ -2,4 +2,4 @@
 /.idea/
 /public/javascripts/config.js
 
-/package-lock.json.*
+/package-lock.json
