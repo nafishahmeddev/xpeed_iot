@@ -4,11 +4,15 @@ const Conversations = Mongoose.model("conversations", new Mongoose.Schema({
         type: String,
     },
     type: {},
+    adminId: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
     members: [{
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'users'
     }]
-}));;
+}));
 Conversations.getConversations = (user_id, type = 0) =>{
     return Conversations.aggregate([
         {
@@ -50,10 +54,13 @@ Conversations.getConversations = (user_id, type = 0) =>{
         }
     ]);
 }
-Conversations.createGroup = ( title, users=[]) => {
+Conversations.createGroup = ( admin_id, title, users=[]) => {
+    users = users.push(admin_id);
     return new Promise((resolve, reject)=>{
         Conversations.create({
+            adminId: new Mongoose.Types.ObjectId(admin_id),
             members: users.map(ob=>new Mongoose.Types.ObjectId(ob)),
+            type:1,
             title
         }, function (err, small) {
             if (err)

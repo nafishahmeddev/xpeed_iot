@@ -144,8 +144,21 @@ router.post(
 );
 
 
-router.get("/conversations", auth, async (req, res) => {
+router.get("/conversation", auth, async (req, res) => {
     try {
+        const conversations= await Conversations.getConversations(req.user._id);
+        res.json(conversations);
+    } catch (e) {
+        console.log(e.message);
+        res.send({ message: "Error in Fetching user" });
+    }
+});
+
+router.post("/conversation/group/create", auth,
+    [check("users", "Please select users").isArray()],
+    async (req, res) => {
+    try {
+        const {users} = req.body;
         const conversations= await Conversations.getConversations(req.user._id);
         res.json(conversations);
     } catch (e) {
