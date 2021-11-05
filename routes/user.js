@@ -145,7 +145,7 @@ router.post(
 
 router.get("/me", auth, async (req, res) => {
     try {
-        const user= await Users.findOne({_id: req.user._id});
+        const user = await Users.findOne( {_id : req.user.id});
         res.json(user);
     } catch (e) {
         console.log(e.message);
