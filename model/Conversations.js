@@ -53,7 +53,8 @@ Conversations.getConversations = (user_id, type = 0) =>{
 Conversations.createGroup = ( title, users=[]) => {
     return new Promise((resolve, reject)=>{
         Conversations.create({
-            //members: users.map(ob=>Mongoose.)
+            members: users.map(ob=>new Mongoose.Types.ObjectId(ob)),
+            title
         }, function (err, small) {
             if (err)
                 return reject(err);
