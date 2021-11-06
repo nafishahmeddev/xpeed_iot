@@ -15,6 +15,7 @@ InitiateMongoServer();
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
+var conversationRouter = require('./routes/conversation');
 
 var app = express();
 app.use(cors())
@@ -31,15 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use("/user", userRouter);
-
-app.use('/privacy', function(req, res, next) {
-  res.render('privacy');
-});
-
-app.use('/terms', function(req, res, next) {
-  res.render('terms');
-});
-
+app.use("/conversation", conversationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

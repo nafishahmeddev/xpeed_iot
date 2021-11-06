@@ -55,6 +55,10 @@ Conversations.getConversations = (user_id, type = 0) =>{
         }
     ]);
 }
+Conversations.TYPE = {
+    P2P : 0,
+    GRP : 1
+}
 Conversations.createGroup = ( admin_id, title, users=[]) => {
     users = users.push(admin_id);
     return new Promise((resolve, reject)=>{
@@ -63,6 +67,23 @@ Conversations.createGroup = ( admin_id, title, users=[]) => {
             members: users.map(ob=>new Mongoose.Types.ObjectId(ob)),
             type:1,
             title
+        }, function (err, small) {
+            if (err)
+                return reject(err);
+            resolve({
+                success:true
+            });
+            // saved!
+        });
+    })
+}
+Conversations.create = ( admin_id, user_id) => {
+    let users = [admin_id, user_id]
+    return new Promise((resolve, reject)=>{
+        Conversations.create({
+            adminId: new Mongoose.Types.ObjectId(admin_id),
+            members: users.map(ob=>new Mongoose.Types.ObjectId(ob)),
+            type:0,
         }, function (err, small) {
             if (err)
                 return reject(err);
