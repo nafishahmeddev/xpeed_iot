@@ -50,7 +50,7 @@ Conversations.getConversations = (user_id, type = 0) =>{
                 "_id": "$_id",
                 "title": { "$first": "$title"},
                 "type": { "$first": "$type"},
-                //"members": {"$push": "$members"}
+                "members": {"$push": "$members"}
             }
         }
     ]);
