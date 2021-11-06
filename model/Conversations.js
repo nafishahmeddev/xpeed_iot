@@ -49,7 +49,7 @@ Conversations.getConversations = (user_id, type = 0) =>{
             $group: {
                 "_id": "$_id",
                 "title": { "$first": "$title"},
-                "type": { "$first": "$type"},
+                "is_group": { "$first": "$type"},
                 "members": {"$push": "$members"}
             }
         }
