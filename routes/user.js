@@ -1,17 +1,15 @@
 
 // Filename : user.js
 
+import sequelize from "../config/db";
+
 const express = require("express");
 const { check, validationResult} = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const auth = require("../middleware/auth");
-
-const Users = require("../model/Users");
-const Conversations = require("../model/Conversations");
-const Mongoose = require("mongoose");
-
+import models from "../models";
 
 router.post(
     "/signup",
@@ -30,42 +28,39 @@ router.post(
             });
         }
 
-        const {
-            name,
-            email,
-            password
-        } = req.body;
+        const {name, email, password} = req.body;
+        let t = null;
         try {
-            let user = await Users.findOne({
-                email
+            let _check_user = await models.user.findOne({
+                where: {
+                    email
+                }
             });
-            if (user) {
+            if (_check_user) {
                 return res.status(400).json({
                     msg: "Users Already Exists"
                 });
             }
 
-            user = new Users({
-                name,
-                email,
-                password
-            });
 
+            t = await  sequelize.transaction();
             const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(password, salt);
+            let pass = await bcrypt.hash(password, salt);
 
-            await user.save();
+            let _insert_user = await models.user.create({
+                name, email, password: pass
+            })
 
             const payload = {
                 user: {
-                    id: user.id
+                    id: _insert_user.id
                 }
             };
 
             jwt.sign(
                 payload,
                 "randomString", {
-                    expiresIn: 10000
+                    expiresIn: 100000
                 },
                 (err, token) => {
                     if (err) throw err;
@@ -74,8 +69,11 @@ router.post(
                     });
                 }
             );
+
+            await  t.commit();
         } catch (err) {
-            console.log(err.message);
+            if(t)await t.rollback();
+            console.log(err);
             res.status(500).send("Error in Saving");
         }
     }
@@ -101,8 +99,8 @@ router.post(
 
         const { email, password } = req.body;
         try {
-            let user = await Users.findOne({
-                email
+            let user = await models.user.findOne({
+                where: {email}
             });
             if (!user)
                 return res.status(400).json({
@@ -145,7 +143,12 @@ router.post(
 
 router.get("/me", auth, async (req, res) => {
     try {
-        const user = await Users.findOne( {_id : req.user.id});
+        const user = await models.user.findOne({
+            attributes:["id", "name", "email", "phone_number"],
+                where: {
+                id : req.user.id
+            }
+        });
         res.json(user);
     } catch (e) {
         console.log(e.message);
